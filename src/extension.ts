@@ -14,12 +14,14 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "vscode-b2cc-content-editor" is now active!');
 
+	let sandboxes = context.globalState.get('sandboxes') || {};
+	// vscode.commands.executeCommand('setContext', 'b2cc-content-editor.sandboxesWelcomeView', Object.keys(sandboxes).length > 0);
+
+	// Show the Add Sandbox panel
 	const addSandboxCommand = vscode.commands.registerCommand('b2cc-content-editor.addSandbox', () => {
-		AddSandboxPanel.render(context.extensionUri);
+		AddSandboxPanel.render(context);
 	});
-
 	context.subscriptions.push(addSandboxCommand);
-
 }
 
 // let obj: webViews = {};

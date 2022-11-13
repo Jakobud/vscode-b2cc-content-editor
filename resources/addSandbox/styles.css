@@ -1,0 +1,43 @@
+body {
+  padding-bottom: 4rem;
+}
+
+vscode-text-field {
+  width: 100%;
+  max-width: 500px;
+}
+
+vscode-text-field input {
+  font-family: monospace;
+}
+
+.form-control {
+  margin-bottom: 1.5rem;
+}
+
+.form-helper {
+  color: #aaa;
+}
+
+hr {
+  margin-bottom: 1.5rem;
+}
+
+.monospace {
+  font-family: monospace;
+}
+
+vscode-button {
+  margin: 1rem 0;
+}
+
+#form-error {
+  display: none;
+  border: 1px solid #e84e4f;
+  padding: 0.5rem;
+  background-color: #9c2b2e;
+}
+
+#form-error.visible {
+  display: inline;
+}
