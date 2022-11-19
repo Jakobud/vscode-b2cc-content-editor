@@ -1,10 +1,6 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-// import { config } from 'process';
 import * as vscode from 'vscode';
-// import { readFile } from 'fs/promises';
-// import { addSandbox } from './webViews';
 import { AddSandboxPanel } from './panels/addSandboxPanel';
+import { SandboxDataProvider } from './providers/SandboxDataProvider';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -14,25 +10,30 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "vscode-b2cc-content-editor" is now active!');
 
-	let sandboxes = context.globalState.get('sandboxes') || {};
-	// vscode.commands.executeCommand('setContext', 'b2cc-content-editor.sandboxesWelcomeView', Object.keys(sandboxes).length > 0);
-
 	// Show the Add Sandbox panel
 	const addSandboxCommand = vscode.commands.registerCommand('b2cc-content-editor.addSandbox', () => {
 		AddSandboxPanel.render(context);
 	});
 	context.subscriptions.push(addSandboxCommand);
+
+	// vscode.commands.executeCommand('setContext', 'b2cc-content-editor.sandboxesWelcomeView', Object.keys(sandboxes).length > 0);
+
+
+
+	// Show the Sandboxes
+	context.globalState.update('sandboxes', null);
+	// let sandboxes = context.globalState.get('sandboxes') || [];
+
+	// console.log(Object.keys(sandboxes));
+
+	// for (let c = 0; c < sandboxes.length; c++) {
+	// 	const element = sandboxes[c];
+	// 	console.log(typeof(element));
+	// }
+
+	// const sandboxDataProvider = new SandboxDataProvider(context);
+	// vscode.window.registerTreeDataProvider('b2cc-content-editor.views.sandboxes', sandboxDataProvider);
 }
-
-// let obj: webViews = {};
-
-// async function getAddSandboxWebviewContent() {
-// 	if (!webViews.addSandbox.html) {
-// 		webViews.addSandbox.html = (await readFile('./webViews/addSandbox/addSandbox.html')).toString();
-// 	}
-
-// 	return webViews.addSandbox.html;
-// }
 
 // This method is called when your extension is deactivated
 export function deactivate() { }

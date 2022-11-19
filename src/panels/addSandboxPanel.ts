@@ -33,31 +33,29 @@ export class AddSandboxPanel {
 
         // Create sandboxes global state if it doesn't exist
         if (!context.globalState.get('sandboxes')) {
-          context.globalState.update('sandboxes', {});
+          context.globalState.update('sandboxes', []);
         }
 
-        // Get saved sandboxes
+        // Define the new Sandbox
+        let sandbox = new Sandbox(message.name, message.host, message.id, message.password);
+
+        console.log(typeof(sandbox));
+
+        // Updated saved sandbox configurations
         let sandboxes: any = context.globalState.get('sandboxes');
+        sandboxes.push(sandbox);
+        context.globalState.update('sandboxes', sandboxes);
 
-        // Does saved sandbox already exist?
-        if (!sandboxes[message.host]) {
-
-          let sandbox = new Sandbox(message.host, message.clientId, message.clientPassword);
-
-          sandboxes[message.host] = sandbox;
-          context.globalState.update('sandboxes', sandboxes);
-
-          // TODO: Update context for sandbox panel welcome message
-
-          // Close the Add Sandbox Panel
-          AddSandboxPanel.currentPanel?._panel.dispose();
-        } else {
-          // Pass error back to webview panel
-          AddSandboxPanel.currentPanel?._panel.webview.postMessage({
-            type: 'error',
-              message: 'Sandbox configuration already exists for: ' + message.host
-          });
+        sandboxes = context.globalState.get('sandboxes');
+        for (let c = 0; c < sandboxes.length; c++) {
+          const element = sandboxes[c];
+          console.log(typeof(element));
         }
+
+        // TODO: Update context for sandbox panel welcome message
+
+        // Close the Add Sandbox Panel
+        AddSandboxPanel.currentPanel?._panel.dispose();
       });
     }
   }
@@ -110,7 +108,12 @@ export class AddSandboxPanel {
         <vscode-divider role="presentation"></vscode-divider>
 
         <div class='form-control'>
-          <vscode-text-field id='host' name='host' placeholder='abcd-123.sandbox.us01.dx.commercecloud.salesforce.com'>Host Name</vscode-text-field>
+          <vscode-text-field id='name' name='name' placeholder="John's Sandbox, Development, Staging, etc...">Sandbox Name</vscode-text-field>
+          <div class='form-helper'></div>
+        </div>
+
+        <div class='form-control'>
+          <vscode-text-field id='host' name='host' placeholder='abcd-123.sandbox.us01.dx.commercecloud.salesforce.com'>Hostname</vscode-text-field>
           <div class='form-helper'>Do not include the protocol (https://, etc)</div>
         </div>
 

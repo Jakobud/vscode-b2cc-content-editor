@@ -6,6 +6,11 @@ function main() {
   const saveButton = document.getElementById("save");
   saveButton.addEventListener("click", save);
 
+  const nameInput = document.getElementById("name");
+  nameInput.addEventListener('keyup', () => {
+    checkInputs(saveButton);
+  });
+
   const hostInput = document.getElementById("host");
   hostInput.addEventListener('keyup', () => {
     checkInputs(saveButton);
@@ -30,15 +35,16 @@ function main() {
   }
 
   function validate() {
-    return (hostInput.value.trim().length > 0 && clientIdInput.value.trim().length > 0 && clientPasswordInput.value.trim().length > 0);
+    return (nameInput.value.trim().length > 0 && hostInput.value.trim().length > 0 && clientIdInput.value.trim().length > 0 && clientPasswordInput.value.trim().length > 0);
   }
 
   function save() {
     if (validate()) {
       vscode.postMessage({
+        name: nameInput.value,
         host: hostInput.value,
-        clientId: clientIdInput.value,
-        clientPassword: clientPasswordInput.value
+        id: clientIdInput.value,
+        password: clientPasswordInput.value
       });
     }
   }
