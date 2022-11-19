@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { Sandbox } from '../Sandbox';
 import { getNonce } from '../utilities/getNonce';
 import { getUri } from '../utilities/getUri';
+import { LocalStorage } from '../utilities/LocalStorage';
 
 export class AddSandboxPanel {
   public static currentPanel: AddSandboxPanel | undefined;
@@ -31,26 +32,11 @@ export class AddSandboxPanel {
 
       AddSandboxPanel.currentPanel._panel.webview.onDidReceiveMessage(message => {
 
-        // Create sandboxes global state if it doesn't exist
-        if (!context.globalState.get('sandboxes')) {
-          context.globalState.update('sandboxes', []);
-        }
+        let storage = new LocalStorage(context);
 
-        // Define the new Sandbox
+        // Save new Sandbox
         let sandbox = new Sandbox(message.name, message.host, message.id, message.password);
-
-        console.log(typeof(sandbox));
-
-        // Updated saved sandbox configurations
-        let sandboxes: any = context.globalState.get('sandboxes');
-        sandboxes.push(sandbox);
-        context.globalState.update('sandboxes', sandboxes);
-
-        sandboxes = context.globalState.get('sandboxes');
-        for (let c = 0; c < sandboxes.length; c++) {
-          const element = sandboxes[c];
-          console.log(typeof(element));
-        }
+        storage.addSandbox(sandbox);
 
         // TODO: Update context for sandbox panel welcome message
 

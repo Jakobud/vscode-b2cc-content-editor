@@ -2,14 +2,19 @@ import { TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { AbstractBaseNode } from './AbstractBaseNode';
 
 export class SandboxNode extends AbstractBaseNode {
-	constructor(readonly message: string) {
+	private text;
+	private description;
+
+	constructor(text: string, description: string) {
 		super();
+		this.text = text;
+		this.description = description;
 	}
 
 	getTreeItem() {
-		const text = this.message;
-		const node = new TreeItem(text, TreeItemCollapsibleState.None);
-		node.tooltip = text;
+		const node = new TreeItem(this.text, TreeItemCollapsibleState.None);
+		node.tooltip = this.text;
+		node.description = this.description;
 
 		return node;
 	}
