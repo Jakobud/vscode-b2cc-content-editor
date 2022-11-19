@@ -1,4 +1,4 @@
-import { TreeItem, TreeItemCollapsibleState } from 'vscode';
+import { TreeItem, TreeItemCollapsibleState, ThemeIcon } from 'vscode';
 import { AbstractBaseNode } from './AbstractBaseNode';
 
 export class SandboxNode extends AbstractBaseNode {
@@ -15,6 +15,7 @@ export class SandboxNode extends AbstractBaseNode {
 		const node = new TreeItem(this.text, TreeItemCollapsibleState.None);
 		node.tooltip = this.text;
 		node.description = this.description;
+		node.iconPath = new ThemeIcon('symbol-method');
 
 		return node;
 	}

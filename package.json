@@ -19,7 +19,22 @@
     "commands": [
       {
         "command": "b2cc-content-editor.addSandbox",
-        "title": "Add Sandbox"
+        "title": "Add Sandbox",
+        "category": "B2CC Content Editor",
+        "icon": "$(add)"
+      },
+      {
+        "command": "b2cc-content-editor.editSandbox",
+        "title": "Edit Sandbox",
+        "category": "B2CC Content Editor",
+        "icon": "$(edit)",
+        "when": "false"
+      },
+      {
+        "command": "b2cc-content-editor.deleteSandbox",
+        "title": "Delete Sandbox",
+        "category": "B2CC Content Editor",
+        "icon": "$(trash)"
       }
     ],
     "viewsContainers": {
@@ -54,7 +69,35 @@
       }
     ],
     "menus": {
-      "view/title": []
+      "view/title": [
+        {
+          "command": "b2cc-content-editor.addSandbox",
+          "when": "view == b2cc-content-editor.views.sandboxes",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "b2cc-content-editor.editSandbox",
+          "when": "view == b2cc-content-editor.views.sandboxes",
+          "group": "inline"
+        },
+        {
+          "command": "b2cc-content-editor.deleteSandbox",
+          "when": "view == b2cc-content-editor.views.sandboxes",
+          "group": "inline"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "b2cc-content-editor.editSandbox",
+          "when": "false"
+        },
+        {
+          "command": "b2cc-content-editor.deleteSandbox",
+          "when": "false"
+        }
+      ]
     }
   },
   "scripts": {
