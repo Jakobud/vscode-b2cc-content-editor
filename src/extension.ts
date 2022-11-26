@@ -4,8 +4,6 @@ import { SandboxDataProvider } from './providers/SandboxDataProvider';
 import { Sandbox } from './Sandbox';
 import sandboxes from './Sandboxes';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
 
   await sandboxes.init(context);
@@ -19,13 +17,15 @@ export async function activate(context: vscode.ExtensionContext) {
   // Show Edit Sandbox panel command
   const editSandboxCommand = vscode.commands.registerCommand('b2cc-content-editor.editSandbox', sandbox => {
     console.log("EDIT SANDBOX COMMAND");
-    console.log(sandbox);
   });
   context.subscriptions.push(editSandboxCommand);
 
   // Delete Sandbox command
-  const deleteSandboxCommand = vscode.commands.registerCommand('b2cc-content-editor.deleteSandbox', () => {
-    console.log("DELETE SANDBOX COMMAND");
+  const deleteSandboxCommand = vscode.commands.registerCommand('b2cc-content-editor.deleteSandbox', async node => {
+    let confirmation = await vscode.window.showInformationMessage("Delete Sandbox?", "Yes", "No");
+    if (confirmation === 'Yes') {
+      await node.sandbox.delete();
+    }
   });
   context.subscriptions.push(deleteSandboxCommand);
 

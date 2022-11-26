@@ -9,7 +9,8 @@ interface SandboxInterface {
   name: string,
   host: string,
   id: string,
-  password: string
+  password: string,
+  delete(): Promise<void>
 }
 
 export class SandboxDataProvider extends BaseTreeDataProvider {

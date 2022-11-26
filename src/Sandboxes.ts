@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto";
+import * as vscode from 'vscode';
 import { ExtensionContext, Memento } from "vscode";
 import { Sandbox } from "./Sandbox";
 
@@ -31,46 +31,54 @@ class Sandboxes {
     await this.save();
   }
 
-  public getAll(): {} {
-    return this.sandboxes || {};
+  /**
+   * Get all sandboxes
+   * @returns []
+   */
+  public getAll(): [] {
+    return this.sandboxes || [];
   }
 
-  public get(uuid: string): any {
-    let sandbox = this.sandboxes[uuid];
-    return sandbox ? sandbox : undefined;
-  }
-
+  /**
+   * Add a new Sandbox
+   * @param sandbox The Sandbox being added
+   */
   public async add(sandbox: Sandbox) {
-    let uuid = randomUUID();
     if (!this.sandboxes) {
       this.sandboxes = {};
     }
-    this.sandboxes[uuid] = sandbox;
+    this.sandboxes.push(sandbox);
     await this.save();
   }
 
-  public async delete(uuid: string) {
-    this.sandboxes[uuid] = undefined;
+  /**
+   * Delete a Sandbox by reference
+   * @param sandbox The Sandbox to be deleted
+   */
+  public async delete(sandbox: Sandbox) {
+    if (this.sandboxes && this.sandboxes.indexOf(sandbox)) {
+      let index = this.sandboxes.indexOf(sandbox);
+      this.sandboxes.splice(index, 1);
+    }
     await this.save();
   }
 
-  public async update(uuid: string, sandbox: Sandbox) {
-    if (!this.sandboxes) {
-      this.sandboxes = {};
-    }
-    if (this.sandboxes[uuid]) {
-      this.sandboxes[uuid] = sandbox;
-      await this.save();
-    }
-  }
-
+  /**
+   * Delete all Sandboxes
+   */
   public async deleteAll() {
     this.sandboxes = undefined;
     await this.save();
   }
 
+  /**
+   * Save sandboxes to extension globalState and refresh the sandbox panel list
+   */
   private async save() {
     await this.state?.update(this.key, this.sandboxes);
+
+    // Refresh the sandbox panel list
+    vscode.commands.executeCommand('b2cc-content-editor.refreshSandboxes');
   }
 }
 

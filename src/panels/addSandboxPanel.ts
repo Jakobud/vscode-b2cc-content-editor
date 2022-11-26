@@ -2,8 +2,7 @@ import * as vscode from 'vscode';
 import { Sandbox } from '../Sandbox';
 import { getNonce } from '../utilities/getNonce';
 import { getUri } from '../utilities/getUri';
-import { LocalStorage } from '../utilities/LocalStorage';
-import Singleton from '../Sandboxes';
+import sandboxes from '../Sandboxes';
 
 export class AddSandboxPanel {
   public static currentPanel: AddSandboxPanel | undefined;
@@ -31,13 +30,11 @@ export class AddSandboxPanel {
 
       AddSandboxPanel.currentPanel = new AddSandboxPanel(panel, context);
 
-      AddSandboxPanel.currentPanel._panel.webview.onDidReceiveMessage(message => {
-
-        let storage = new LocalStorage(context);
+      AddSandboxPanel.currentPanel._panel.webview.onDidReceiveMessage(async message => {
 
         // Save new Sandbox
         let sandbox = new Sandbox(message.name, message.host, message.id, message.password);
-        storage.addSandbox(sandbox);
+        await sandboxes.add(sandbox);
 
         // TODO: Update context for sandbox panel welcome message
 

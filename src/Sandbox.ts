@@ -1,3 +1,5 @@
+import sandboxes from "./Sandboxes";
+
 export class Sandbox {
   public name: string;
   public host: string;
@@ -9,5 +11,9 @@ export class Sandbox {
     this.host = host;
     this.id = id;
     this.password = password;
+  }
+
+  public async delete(): Promise<void> {
+    await sandboxes.delete(this);
   }
 }
