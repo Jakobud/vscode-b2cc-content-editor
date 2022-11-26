@@ -1,15 +1,7 @@
 import * as vscode from 'vscode';
 import { ExtensionContext, Memento } from "vscode";
 import { Sandbox } from "./Sandbox";
-
-interface SandboxInterface {
-  [uuid: string] : {
-    name: string,
-    host: string,
-    id: string,
-    password: string
-  }
-}
+import { SandboxInterface } from './interfaces/SandboxInterface';
 
 class Sandboxes {
   private key = 'sandboxes';
@@ -21,7 +13,7 @@ class Sandboxes {
   public async init(context: ExtensionContext) {
     this.state = context.globalState;
     this.sandboxes = [];
-    let sandboxes: SandboxInterface = this.state.get(this.key, {});
+    let sandboxes: SandboxInterface[] = this.state.get(this.key, []);
 
     // Convert globalState sandbox objects to Sandbox class objects
     for (const [key, value] of Object.entries(sandboxes)) {

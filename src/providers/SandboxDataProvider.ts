@@ -4,14 +4,7 @@ import { AbstractBaseNode } from '../nodes/AbstractBaseNode';
 import { SandboxNode } from '../nodes/SandboxNode';
 import sandboxes from '../Sandboxes';
 import natsort from 'natsort';
-
-interface SandboxInterface {
-  name: string,
-  host: string,
-  id: string,
-  password: string,
-  delete(): Promise<void>
-}
+import { SandboxInterface } from '../interfaces/SandboxInterface';
 
 export class SandboxDataProvider extends BaseTreeDataProvider {
   constructor() {
