@@ -34,6 +34,8 @@ function main() {
     }
   }
 
+  checkInputs(saveButton);
+
   function validate() {
     return (nameInput.value.trim().length > 0 && hostInput.value.trim().length > 0 && clientIdInput.value.trim().length > 0 && clientPasswordInput.value.trim().length > 0);
   }

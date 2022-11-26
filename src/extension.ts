@@ -15,8 +15,8 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(addSandboxCommand);
 
   // Show Edit Sandbox panel command
-  const editSandboxCommand = vscode.commands.registerCommand('b2cc-content-editor.editSandbox', sandbox => {
-    console.log("EDIT SANDBOX COMMAND");
+  const editSandboxCommand = vscode.commands.registerCommand('b2cc-content-editor.editSandbox', async node => {
+    AddSandboxPanel.render(context, node.sandbox);
   });
   context.subscriptions.push(editSandboxCommand);
 

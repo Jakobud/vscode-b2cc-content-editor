@@ -48,9 +48,15 @@ class Sandboxes {
    * @param sandbox The Sandbox to be deleted
    */
   public async delete(sandbox: Sandbox) {
-    if (this.sandboxes && this.sandboxes.indexOf(sandbox)) {
-      let index = this.sandboxes.indexOf(sandbox);
-      this.sandboxes.splice(index, 1);
+    // If the sandbox exists
+    if (this.sandboxes && this.sandboxes.indexOf(sandbox) !== -1) {
+      // Splice the sandbox out of the list if the array is more than 1 element
+      if (this.sandboxes.length > 1) {
+        let index = this.sandboxes.indexOf(sandbox);
+        this.sandboxes.splice(index, 1);
+      } else {
+        this.sandboxes = [];
+      }
     }
     await this.save();
   }
@@ -66,7 +72,7 @@ class Sandboxes {
   /**
    * Save sandboxes to extension globalState and refresh the sandbox panel list
    */
-  private async save() {
+  public async save() {
     await this.state?.update(this.key, this.sandboxes);
 
     // Refresh the sandbox panel list

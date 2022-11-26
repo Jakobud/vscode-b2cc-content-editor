@@ -5,50 +5,54 @@ import { getUri } from '../utilities/getUri';
 import sandboxes from '../Sandboxes';
 
 export class AddSandboxPanel {
-  public static currentPanel: AddSandboxPanel | undefined;
-  private readonly _panel: vscode.WebviewPanel;
+  // public static currentPanel: AddSandboxPanel | undefined;
+  private readonly panel: vscode.WebviewPanel;
   private _disposables: vscode.Disposable[] = [];
 
-  private constructor(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
-    this._panel = panel;
+  private constructor(panel: vscode.WebviewPanel, context: vscode.ExtensionContext, sandbox?: Sandbox) {
+    this.panel = panel;
 
-    this._panel.onDidDispose(this.dispose, null, this._disposables);
+    this.panel.onDidDispose(this.dispose, null, this._disposables);
 
-    this._panel.webview.html = this._getWebviewContent(this._panel.webview, context.extensionUri);
+    this.panel.webview.html = this._getWebviewContent(this.panel.webview, context.extensionUri, sandbox);
   }
 
   // Render the AddSandboxPanel
-  public static render(context: vscode.ExtensionContext) {
-    if (AddSandboxPanel.currentPanel) {
-      AddSandboxPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
-    } else {
-      const panel = vscode.window.createWebviewPanel("addSandboxConfiguration", "Add Sandbox", vscode.ViewColumn.One, {
-        enableScripts: true,
-      });
+  public static render(context: vscode.ExtensionContext, sandbox?: Sandbox) {
+    const viewType = sandbox ? 'editSandboxConfiguration' : 'addSandboxConfiguration';
+    const title = sandbox ? 'Edit Sandbox' : 'Add Sandbox';
+    const panel = vscode.window.createWebviewPanel(viewType, title, vscode.ViewColumn.One, { enableScripts: true });
 
-      let state = context.globalState;
+    let currentPanel = new AddSandboxPanel(panel, context, sandbox);
 
-      AddSandboxPanel.currentPanel = new AddSandboxPanel(panel, context);
+    // Receiving message from webview
+    currentPanel.panel.webview.onDidReceiveMessage(async message => {
 
-      AddSandboxPanel.currentPanel._panel.webview.onDidReceiveMessage(async message => {
+      if (sandbox) {
+        // Edit the current sandbox
+        sandbox.name = message.name;
+        sandbox.host = message.host;
+        sandbox.id = message.id;
+        sandbox.password = message.password;
+        await sandboxes.save();
+      } else {
+        // Add new Sandbox
+        await sandboxes.add(new Sandbox(message.name, message.host, message.id, message.password));
+      }
 
-        // Save new Sandbox
-        let sandbox = new Sandbox(message.name, message.host, message.id, message.password);
-        await sandboxes.add(sandbox);
+      // TODO: Update context for sandbox panel welcome message
 
-        // TODO: Update context for sandbox panel welcome message
-
-        // Close the Add Sandbox Panel
-        AddSandboxPanel.currentPanel?._panel.dispose();
-      });
-    }
+      // Close the Add Sandbox Panel
+      currentPanel.panel.dispose();
+    });
   }
+  // }
 
   // addSandboxPanel deconstructor
   public dispose() {
-    AddSandboxPanel.currentPanel = undefined;
+    // AddSandboxPanel.currentPanel = undefined;
 
-    this._panel.dispose();
+    this.panel.dispose();
 
     while (this._disposables.length) {
       const disposable = this._disposables.pop();
@@ -59,7 +63,7 @@ export class AddSandboxPanel {
   }
 
   // Get the content of the webview
-  private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
+  private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri, sandbox?: Sandbox) {
     const toolkitUri = getUri(webview, extensionUri, [
       'node_modules',
       '@vscode',
@@ -71,6 +75,12 @@ export class AddSandboxPanel {
     const stylesUri = getUri(webview, extensionUri, ['resources', 'addSandbox', 'styles.css']);
     const scriptUri = getUri(webview, extensionUri, ['resources', 'addSandbox', 'script.js']);
     const nonce = getNonce();
+
+    // If editing a sandbox, pass values to webview
+    const sandboxName = sandbox ? sandbox.name : '';
+    const sandboxHost = sandbox ? sandbox.host : '';
+    const sandboxId = sandbox ? sandbox.id : '';
+    const sandboxPassword = sandbox ? sandbox.password : '';
 
     return /*html*/`
       <!DOCTYPE html>
@@ -92,12 +102,12 @@ export class AddSandboxPanel {
         <vscode-divider role="presentation"></vscode-divider>
 
         <div class='form-control'>
-          <vscode-text-field id='name' name='name' placeholder="John's Sandbox, Development, Staging, etc...">Sandbox Name</vscode-text-field>
+          <vscode-text-field id='name' name='name' placeholder="John's Sandbox, Development, Staging, etc..." value='${sandboxName}'>Sandbox Name</vscode-text-field>
           <div class='form-helper'></div>
         </div>
 
         <div class='form-control'>
-          <vscode-text-field id='host' name='host' placeholder='abcd-123.sandbox.us01.dx.commercecloud.salesforce.com'>Hostname</vscode-text-field>
+          <vscode-text-field id='host' name='host' placeholder='abcd-123.sandbox.us01.dx.commercecloud.salesforce.com' value='${sandboxHost}'>Hostname</vscode-text-field>
           <div class='form-helper'>Do not include the protocol (https://, etc)</div>
         </div>
 
@@ -106,11 +116,11 @@ export class AddSandboxPanel {
         <h1>API Client</h1>
 
         <div class='form-control'>
-          <vscode-text-field id='client-id' name='client-id'>API Client ID</vscode-text-field>
+          <vscode-text-field id='client-id' name='client-id' value='${sandboxId}'>API Client ID</vscode-text-field>
         </div>
 
         <div class='form-control'>
-          <vscode-text-field id='client-password' name='client-password'>API Client Password</vscode-text-field>
+          <vscode-text-field id='client-password' name='client-password' value='${sandboxPassword}'>API Client Password</vscode-text-field>
         </div>
 
         <p>API Client ID's and Password's can be created by an Account Administrator in the <a href='https://documentation.b2c.commercecloud.salesforce.com/DOC1/topic/com.demandware.dochelp/content/b2c_commerce/topics/account_manager/b2c_account_manager_overview.html'>Account Manager</a>. For more information, see the <a href='https://documentation.b2c.commercecloud.salesforce.com/DOC1/index.jsp?topic=%2Fcom.demandware.dochelp%2Fcontent%2Fb2c_commerce%2Ftopics%2Faccount_manager%2Fb2c_account_manager_add_api_client_id.html'>Add an API Client documentation</a>.</p>

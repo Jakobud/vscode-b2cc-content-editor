@@ -2,9 +2,9 @@ import * as vscode from 'vscode';
 import { BaseTreeDataProvider } from './BaseTreeDataProvider';
 import { AbstractBaseNode } from '../nodes/AbstractBaseNode';
 import { SandboxNode } from '../nodes/SandboxNode';
+import { SandboxInterface } from '../interfaces/SandboxInterface';
 import sandboxes from '../Sandboxes';
 import natsort from 'natsort';
-import { SandboxInterface } from '../interfaces/SandboxInterface';
 
 export class SandboxDataProvider extends BaseTreeDataProvider {
   constructor() {
