@@ -1,18 +1,20 @@
-import { ExtensionContext } from 'vscode';
+import * as vscode from 'vscode';
 import { BaseTreeDataProvider } from './BaseTreeDataProvider';
 import { AbstractBaseNode } from '../nodes/AbstractBaseNode';
 import { SandboxNode } from '../nodes/SandboxNode';
-import { Sandbox } from '../Sandbox';
-import { listenerCount } from 'process';
-import { LocalStorage } from '../utilities/LocalStorage';
+import sandboxes from '../Sandboxes';
+import natsort from 'natsort';
+
+interface SandboxInterface {
+  name: string,
+  host: string,
+  id: string,
+  password: string
+}
 
 export class SandboxDataProvider extends BaseTreeDataProvider {
-  private context;
-
-  constructor(context: ExtensionContext) {
+  constructor() {
     super();
-
-    this.context = context;
   }
 
   getTreeItem(element: AbstractBaseNode) {
@@ -20,21 +22,26 @@ export class SandboxDataProvider extends BaseTreeDataProvider {
   }
 
   getChildren(element: SandboxNode | undefined): SandboxNode[] {
-    let storage = new LocalStorage(this.context);
+    let children: any[] = [];
+    let allSandboxes: SandboxInterface[] = Object.values(sandboxes.getAll());
 
-    let sandboxes = storage.getSandboxes();
+    const sorter = natsort({ insensitive: true});
 
-    // Sort Sandboxes by name
-    sandboxes.sort((a, b) => {
-      return (a['name'].toUpperCase() > b['name'].toUpperCase()) ? 1 : -1;
+    allSandboxes.sort((a: any, b: any) => {
+      return sorter(a.name, b.name);
     });
 
-    let children: any[] = [];
-
-    sandboxes.forEach(sandbox => {
-      children.push(new SandboxNode(sandbox.name, sandbox.host));
+    allSandboxes.forEach(sandbox => {
+      children.push(new SandboxNode(sandbox));
     });
 
     return children;
+  }
+
+  private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
+	readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
+
+  refresh(): void {
+    this._onDidChangeTreeData.fire(undefined);
   }
 }

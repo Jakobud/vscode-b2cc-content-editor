@@ -35,6 +35,12 @@
         "title": "Delete Sandbox",
         "category": "B2CC Content Editor",
         "icon": "$(trash)"
+      },
+      {
+        "command": "b2cc-content-editor.refreshSandboxes",
+        "title": "Refresh Sandboxes",
+        "category": "B2CC Content Editor",
+        "icon": "$(refresh)"
       }
     ],
     "viewsContainers": {
@@ -72,6 +78,11 @@
       "view/title": [
         {
           "command": "b2cc-content-editor.addSandbox",
+          "when": "view == b2cc-content-editor.views.sandboxes",
+          "group": "navigation"
+        },
+        {
+          "command": "b2cc-content-editor.refreshSandboxes",
           "when": "view == b2cc-content-editor.views.sandboxes",
           "group": "navigation"
         }
@@ -129,6 +140,7 @@
   },
   "dependencies": {
     "@vscode/webview-ui-toolkit": "^1.1.0",
+    "natsort": "^2.0.3",
     "vscode-cache": "^0.3.0"
   }
 }

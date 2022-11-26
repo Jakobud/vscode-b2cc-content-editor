@@ -3,6 +3,7 @@ import { Sandbox } from '../Sandbox';
 import { getNonce } from '../utilities/getNonce';
 import { getUri } from '../utilities/getUri';
 import { LocalStorage } from '../utilities/LocalStorage';
+import Singleton from '../Sandboxes';
 
 export class AddSandboxPanel {
   public static currentPanel: AddSandboxPanel | undefined;
@@ -22,7 +23,7 @@ export class AddSandboxPanel {
     if (AddSandboxPanel.currentPanel) {
       AddSandboxPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
     } else {
-      const panel = vscode.window.createWebviewPanel("addSandboxConfiguration", "Add a Sandbox", vscode.ViewColumn.One, {
+      const panel = vscode.window.createWebviewPanel("addSandboxConfiguration", "Add Sandbox", vscode.ViewColumn.One, {
         enableScripts: true,
       });
 

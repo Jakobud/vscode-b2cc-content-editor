@@ -1,22 +1,21 @@
-import { TreeItem, TreeItemCollapsibleState, ThemeIcon } from 'vscode';
+import { ThemeIcon } from 'vscode';
+import { Sandbox } from '../Sandbox';
 import { AbstractBaseNode } from './AbstractBaseNode';
+import { SandboxTreeItem } from './SandboxTreeItem';
 
 export class SandboxNode extends AbstractBaseNode {
-	private text;
-	private description;
+	private sandbox: Sandbox;
 
-	constructor(text: string, description: string) {
+	constructor(sandbox: Sandbox) {
 		super();
-		this.text = text;
-		this.description = description;
+		this.sandbox = sandbox;
 	}
 
 	getTreeItem() {
-		const node = new TreeItem(this.text, TreeItemCollapsibleState.None);
-		node.tooltip = this.text;
-		node.description = this.description;
+		const node = new SandboxTreeItem(this.sandbox);
+		node.tooltip = this.sandbox.name;
+		node.description = this.sandbox.host;
 		node.iconPath = new ThemeIcon('symbol-method');
-
 		return node;
 	}
 }
