@@ -81,6 +81,8 @@ export class AddSandboxPanel {
     const sandboxHost = sandbox ? sandbox.host : '';
     const sandboxId = sandbox ? sandbox.id : '';
     const sandboxPassword = sandbox ? sandbox.password : '';
+    const ocapiVersion = sandbox ? sandbox.version : '';
+    const title = sandbox ? 'Edit Sandbox' : 'Add a New Sandbox';
 
     return /*html*/`
       <!DOCTYPE html>
@@ -97,7 +99,7 @@ export class AddSandboxPanel {
       </head>
 
       <body>
-        <h1>Add a New Sandbox</h1>
+        <h1>${title}</h1>
 
         <vscode-divider role="presentation"></vscode-divider>
 
@@ -115,6 +117,8 @@ export class AddSandboxPanel {
 
         <h1>API Client</h1>
 
+        <p>API Client ID's and Password's can be created by an Account Administrator in the <a href='https://documentation.b2c.commercecloud.salesforce.com/DOC1/topic/com.demandware.dochelp/content/b2c_commerce/topics/account_manager/b2c_account_manager_overview.html'>Account Manager</a>. For more information, see the <a href='https://documentation.b2c.commercecloud.salesforce.com/DOC1/index.jsp?topic=%2Fcom.demandware.dochelp%2Fcontent%2Fb2c_commerce%2Ftopics%2Faccount_manager%2Fb2c_account_manager_add_api_client_id.html'>Add an API Client documentation</a>.</p>
+
         <div class='form-control'>
           <vscode-text-field id='client-id' name='client-id' value='${sandboxId}'>API Client ID</vscode-text-field>
         </div>
@@ -123,25 +127,25 @@ export class AddSandboxPanel {
           <vscode-text-field id='client-password' name='client-password' value='${sandboxPassword}'>API Client Password</vscode-text-field>
         </div>
 
-        <p>API Client ID's and Password's can be created by an Account Administrator in the <a href='https://documentation.b2c.commercecloud.salesforce.com/DOC1/topic/com.demandware.dochelp/content/b2c_commerce/topics/account_manager/b2c_account_manager_overview.html'>Account Manager</a>. For more information, see the <a href='https://documentation.b2c.commercecloud.salesforce.com/DOC1/index.jsp?topic=%2Fcom.demandware.dochelp%2Fcontent%2Fb2c_commerce%2Ftopics%2Faccount_manager%2Fb2c_account_manager_add_api_client_id.html'>Add an API Client documentation</a>.</p>
+        <div class='form-control'>
+          <vscode-text-field id='ocapi-version' name='ocapi-version' placeholder='XX.XX'value='${ocapiVersion}'>OCAPI Version</vscode-text-field>
+        </div>
+
+        <p>It's recommended to choose the latest OCAPI Version that your sandbox supports. To determine the latest version, check the footer of any Business Manager page. The version is always in the format of XX.XX, for example: 22.10 or 18.3</p>
 
         <vscode-divider role="presentation"></vscode-divider>
 
         <h3>Sandbox OCAPI Settings</h3>
 
-        <p>Once you have a Client ID and Password, they must be added to the <a href='https://documentation.b2c.commercecloud.salesforce.com/DOC1/topic/com.demandware.dochelp/OCAPI/current/usage/OCAPISettings.html'>OCAPI Settings</a> in Business Manager under Administration > Site Development > Open Commerce API Settings.</p>
+        <p>After filling out the above configuration, copy/paste the following <a href='https://documentation.b2c.commercecloud.salesforce.com/DOC1/topic/com.demandware.dochelp/OCAPI/current/usage/OCAPISettings.html'>OCAPI Settings</a> in Business Manager under Administration > Site Development > Open Commerce API Settings. Choose the "Data" dropdown.</p>
 
-        <p>These settings go under the Data type. NOT the Shop type.</p>
-
-        <p>Update the <span class='monospace'>client_id</span> value with your unique Client ID (see above). If you are using a different OCAPI version than v22.10, update that as well.</p>
-
-        <vscode-text-area readonly class='monospace' rows=20 cols=65 value='
+        <pre id='settings'>
 {
-  "_v" : "22.10",
+  "_v" : "",
   "clients":
   [
     {
-      "client_id":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "client_id":"",
       "resources":
       [
         {
@@ -153,13 +157,9 @@ export class AddSandboxPanel {
       ]
     }
   ]
-}'></vscode-text-area>
+}</pre>
 
-        <h3>Warning about the default Client ID</h3>
-
-        <p>By default, all B2C Commerce Sandboxes accepts the default Client ID of <span class='monospace'>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</span> with a password of <span class='monospace'>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</span>. Once this client is added to the OCAPI Settings with resource permissions (see above), then this Client ID can be used without the need for a unique Client ID created for you by an Account Administrator.
-
-        <p>However, be careful with this default Client ID. Use it only for testing purposes. Once added to the Sandbox OCAPI Settings, anyone can use it to access the allowed resources via OCAPI-driven tools & scripts, even if they do not have Business Manager access.</p>
+        <p>These OCAPI Settings will allow Visual Studio Code to interact directly with the content assets on your Sandbox.</p>
 
         <vscode-divider role="presentation"></vscode-divider>
 

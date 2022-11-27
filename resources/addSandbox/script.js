@@ -18,11 +18,18 @@ function main() {
 
   const clientIdInput = document.getElementById("client-id");
   clientIdInput.addEventListener('keyup', () => {
+    generateSettingsString();
     checkInputs(saveButton);
   });
 
   const clientPasswordInput = document.getElementById("client-password");
   clientPasswordInput.addEventListener('keyup', () => {
+    checkInputs(saveButton);
+  });
+
+  const ocapiVersionInput = document.getElementById("ocapi-version");
+  ocapiVersionInput.addEventListener('keyup', () => {
+    generateSettingsString();
     checkInputs(saveButton);
   });
 
@@ -43,12 +50,18 @@ function main() {
   function save() {
     if (validate()) {
       vscode.postMessage({
-        name: nameInput.value,
-        host: hostInput.value,
-        id: clientIdInput.value,
-        password: clientPasswordInput.value
+        name: nameInput.value.trim(),
+        host: hostInput.value.trim(),
+        id: clientIdInput.value.trim(),
+        password: clientPasswordInput.value.trim(),
+        version: ocapiVersionInput.value.trim()
       });
     }
+  }
+
+  const settings = document.getElementById('settings');
+  function generateSettingsString() {
+    settings.innerHTML = settingsString.replace('##version##', ocapiVersionInput.value).replace('##client_id##', clientIdInput.value);
   }
 }
 
@@ -59,3 +72,23 @@ window.addEventListener('message', event => {
     element.classList.add('visible');
   }
 });
+
+const settingsString = `
+{
+  "_v" : "##version##",
+  "clients":
+  [
+    {
+      "client_id":"##client_id##",
+      "resources":
+      [
+        {
+          "resource_id":"/libraries/*/content/*",
+          "methods":["get", "patch", "put", "delete"],
+          "read_attributes":"(**)",
+          "write_attributes":"(**)"
+        }
+      ]
+    }
+  ]
+}`
