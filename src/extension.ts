@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { AddSandboxPanel } from './panels/addSandboxPanel';
 import { SandboxDataProvider } from './providers/SandboxDataProvider';
-import { Sandbox } from './Sandbox';
 import sandboxes from './Sandboxes';
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -28,8 +27,6 @@ export async function activate(context: vscode.ExtensionContext) {
     }
   });
   context.subscriptions.push(deleteSandboxCommand);
-
-  // vscode.commands.executeCommand('setContext', 'b2cc-content-editor.sandboxesWelcomeView', Object.keys(sandboxes).length > 0);
 
   // Show the Sandboxes in the tree view
   const sandboxDataProvider = new SandboxDataProvider();

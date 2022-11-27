@@ -3,5 +3,6 @@ export interface SandboxInterface {
   host: string,
   id: string,
   password: string,
+  version: string,
   delete(): Promise<void>
 }

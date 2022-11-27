@@ -63,6 +63,7 @@ function main() {
   function generateSettingsString() {
     settings.innerHTML = settingsString.replace('##version##', ocapiVersionInput.value).replace('##client_id##', clientIdInput.value);
   }
+  generateSettingsString();
 }
 
 window.addEventListener('message', event => {

@@ -37,10 +37,8 @@ export class AddSandboxPanel {
         await sandboxes.save();
       } else {
         // Add new Sandbox
-        await sandboxes.add(new Sandbox(message.name, message.host, message.id, message.password));
+        await sandboxes.add(new Sandbox(message.name, message.host, message.id, message.password, message.version));
       }
-
-      // TODO: Update context for sandbox panel welcome message
 
       // Close the Add Sandbox Panel
       currentPanel.panel.dispose();
