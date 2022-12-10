@@ -139,6 +139,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@vscode/codicons": "^0.0.32",
     "@vscode/webview-ui-toolkit": "^1.1.0",
     "natsort": "^2.0.3",
     "vscode-cache": "^0.3.0"

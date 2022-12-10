@@ -64,6 +64,21 @@ function main() {
     settings.innerHTML = settingsString.replace('##version##', ocapiVersionInput.value).replace('##client_id##', clientIdInput.value);
   }
   generateSettingsString();
+
+  const nextButtons = document.querySelectorAll('vscode-button.next');
+  nextButtons.forEach(button => {
+    button.addEventListener('click', function () {
+      document.querySelector('vscode-panel-tab[aria-selected="true"]').nextElementSibling.click();
+    });
+  });
+
+  const prevButtons = document.querySelectorAll('vscode-button.prev');
+  prevButtons.forEach(button => {
+    button.addEventListener('click', function () {
+      document.querySelector('vscode-panel-tab[aria-selected="true"]').previousElementSibling.click();
+    });
+  });
+
 }
 
 window.addEventListener('message', event => {

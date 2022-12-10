@@ -1,5 +1,5 @@
 body {
-  padding-bottom: 4rem;
+  padding-bottom: 4em;
 }
 
 vscode-text-field {
@@ -12,7 +12,8 @@ vscode-text-field input {
 }
 
 .form-control {
-  margin-bottom: 1.5rem;
+  margin: 1em 0;
+  align-self: stretch;
 }
 
 .form-helper {
@@ -20,7 +21,7 @@ vscode-text-field input {
 }
 
 hr {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.5em;
 }
 
 .monospace {
@@ -28,16 +29,34 @@ hr {
 }
 
 vscode-button {
-  margin: 1rem 0;
+  margin: 1em 0;
+}
+
+vscode-button .codicon {
+  position: relative;
+  top: 2px;
+}
+
+vscode-button .codicon-chevron-right {
+  margin-left: .5em;
+}
+
+vscode-button .codicon-chevron-left {
+  margin-right: .5em;
 }
 
 #form-error {
   display: none;
   border: 1px solid #e84e4f;
-  padding: 0.5rem;
+  padding: 0.5em;
   background-color: #9c2b2e;
 }
 
 #form-error.visible {
   display: inline;
+}
+
+vscode-panel-view {
+  flex-direction: column;
+  align-items: flex-start;
 }
