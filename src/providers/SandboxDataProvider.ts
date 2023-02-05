@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { BaseTreeDataProvider } from './BaseTreeDataProvider';
 import { AbstractBaseNode } from '../nodes/AbstractBaseNode';
 import { SandboxNode } from '../nodes/SandboxNode';
-import { SandboxInterface } from '../interfaces/SandboxInterface';
+import { SandboxInterface } from '../Sandbox';
 import sandboxes from '../Sandboxes';
 import natsort from 'natsort';
 
@@ -12,10 +12,12 @@ export class SandboxDataProvider extends BaseTreeDataProvider {
   }
 
   getTreeItem(element: AbstractBaseNode) {
+    // console.log(element);
     return element.getTreeItem();
   }
 
   getChildren(element: SandboxNode | undefined): SandboxNode[] {
+    // console.log(element);
     let children: any[] = [];
     let allSandboxes: SandboxInterface[] = Object.values(sandboxes.getAll());
 

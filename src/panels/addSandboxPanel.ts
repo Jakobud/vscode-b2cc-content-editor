@@ -38,7 +38,7 @@ export class AddSandboxPanel {
         await sandboxes.save();
       } else {
         // Add new Sandbox
-        await sandboxes.add(new Sandbox(message.name, message.host, message.id, message.password, message.version));
+        await sandboxes.add(new Sandbox(message.name, message.host, message.id, message.password, message.version, message.libraries));
       }
 
       // Close the Add Sandbox Panel
@@ -81,7 +81,8 @@ export class AddSandboxPanel {
     const sandboxHost = sandbox ? sandbox.host : '';
     const sandboxId = sandbox ? sandbox.id : '';
     const sandboxPassword = sandbox ? sandbox.password : '';
-    const ocapiVersion = sandbox ? sandbox.version : '';
+    const sandboxVersion = sandbox ? sandbox.version : '';
+    const sandboxLibraries = sandbox ? {} : {};
     const title = sandbox ? 'Edit Sandbox' : 'Add a New Sandbox';
 
     return /*html*/`
@@ -162,11 +163,11 @@ export class AddSandboxPanel {
           </vscode-panel-view>
 
           <vscode-panel-view id="view-3">
-
+    
             <vscode-divider role="presentation"></vscode-divider>
 
             <div class='form-control'>
-              <vscode-text-field id='ocapi-version' name='ocapi-version' placeholder='XX.XX' value='${ocapiVersion}'>OCAPI Version</vscode-text-field>
+              <vscode-text-field id='ocapi-version' name='ocapi-version' placeholder='XX.XX' value='${sandboxVersion}'>OCAPI Version</vscode-text-field>
             </div>
 
             <p>It's recommended to choose the latest OCAPI Version that your sandbox supports. To determine the latest version, check the footer of any Business Manager page. The version is always in the format of XX.XX, for example: 22.10 or 18.3</p>
@@ -182,10 +183,20 @@ export class AddSandboxPanel {
 
             <vscode-divider role="presentation"></vscode-divider>
 
+            <p>Input a library ID. If it's a private (non-shared), site-specific library, input the site ID instead</p>
             <div class='form-control'>
-              <vscode-text-field id='add-library' name='add-library' value='${ocapiVersion}'>Content Library</vscode-text-field>
-              <div class='form-helper'>Input the library ID. If it's a private (non-shared), site-specific library, input the site ID</div>
+              <vscode-text-field id='add-library' name='add-library' size=50 value=''>Library ID</vscode-text-field>
+              <div>
+                <vscode-button><i class="codicon codicon-plus"></i> Add Library</vscode-button>
+              </div>
             </div>
+
+            <select multiple>
+              <option>testing</option>
+              <option>testing2</option>
+              <option>testing45</option>
+              <option>testing3</option>
+            </select>
 
             <div>
               <vscode-button appearance="primary" class='prev'> <i class="codicon codicon-chevron-left"></i> Prev</vscode-button>
@@ -231,7 +242,7 @@ export class AddSandboxPanel {
 
         <vscode-divider role="presentation"></vscode-divider>
 
-        <vscode-button appearance="primary" id='save' disabled>Save New Sandbox</vscode-button>
+        <vscode-button appearance="primary" id='save' disabled>Save Sandbox</vscode-button>
 
         <div>
           <div id='form-error'></div>

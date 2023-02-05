@@ -5,7 +5,7 @@ export class SandboxTreeItem extends TreeItem {
   public sandbox;
 
   constructor(sandbox: Sandbox) {
-    super(sandbox.name, TreeItemCollapsibleState.None);
+    super(sandbox.name, TreeItemCollapsibleState.Collapsed);
     this.sandbox = sandbox;
   }
 }

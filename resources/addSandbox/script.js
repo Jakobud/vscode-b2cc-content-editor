@@ -54,7 +54,8 @@ function main() {
         host: hostInput.value.trim(),
         id: clientIdInput.value.trim(),
         password: clientPasswordInput.value.trim(),
-        version: ocapiVersionInput.value.trim()
+        version: ocapiVersionInput.value.trim(),
+        libraries: {}
       });
     }
   }
@@ -68,6 +69,7 @@ function main() {
   const nextButtons = document.querySelectorAll('vscode-button.next');
   nextButtons.forEach(button => {
     button.addEventListener('click', function () {
+      alert('test')
       document.querySelector('vscode-panel-tab[aria-selected="true"]').nextElementSibling.click();
     });
   });
